@@ -1,0 +1,27 @@
+{
+  "count": 1,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": 594,
+      "driver_id": {
+        "id": 12,
+        "name": "Нур",
+        "surname": "Сатыбалдиев",
+        "places": 4,
+        "phone": "0770790070",
+        "status": "active",
+        "car": 1
+      },
+      "start_time": "1575601200000",
+      "end_time": "1575640800000",
+      "start_point": "test",
+      "end_point": "test",
+      "user": null,
+      "user_phone": "996777377000",
+      "comment": "test",
+      "user1": 33
+    }
+  ]
+}

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{fragments/layout}">
+<head>
+    <title>Заказы авто</title>
+</head>
+<body>
+<div layout:fragment="content" th:remove="tag">
+    <div th:switch="${orders}" class="container my-5">
+        <div class="row">
+            <div class="col-md-9">
+                <h2 th:case="null">Нет заказов!</h2>
+                <div th:case="*">
+                    <h2 class="my-5">Заказы авто</h2>
+
+                    <form th:action="@{/orders}" method="post" class="form-inline my-2 my-lg-0">
+                        <label for="textvalue">Фильтр</label>:
+                        <input type="text" id="textvalue" name="textvalue" class="form-control" autofocus="autofocus">
+                        <input type="submit" name="filter-submit" id="filter-submit" class="form-control btn btn-info"
+                               value="Поиск">
+                    </form>
+
+                    <table class="table table-striped table-responsive-md">
+                        <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Дата начала</th>
+                            <th>Дата конца</th>
+
+                            <th>Начальная тока</th>
+                            <th>Конечная точка</th>
+
+                            <th>Комментарий</th>
+                            <th>Тел. пользователя</th>
+                            <th>Пользователь</th>
+                            <th>Водитель</th>
+
+                            <th>Править</th>
+                            <th>Удалить</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="order : ${orders.content}">
+                            <td th:text="${order.id}"></td>
+                            <td th:text="${#dates.format(order.startTime, 'dd.MM.yyyy HH:mm')}"></td>
+                            <td th:text="${#dates.format(order.endTime, 'dd.MM.yyyy HH:mm')}"></td>
+
+                            <td th:text="${order.startPoint}"></td>
+                            <td th:text="${order.endPoint}"></td>
+
+                            <td th:text="${order.comment}"></td>
+                            <td th:text="${order.userPhone}"></td>
+                            <th:block th:each="usr : ${users}">
+                                <td th:if="${order.userId == usr.id}"
+                                    th:text="${ order.userId== usr.id ? usr.firstName + ' ' + usr.lastName : '-'}"></td>
+                            </th:block>
+
+                            <th:block th:each="drv : ${drivers}">
+                                <td th:if="${order.driverId == drv.id}"
+                                    th:text="${order.driverId == drv.id ? drv.name  + ' ' + drv.surname : '-'}"></td>
+                            </th:block>
+
+
+                            <td><a th:href="@{/editorder/{id}(id=${order.id})}" class="btn btn-primary"><i
+                                    class="fas fa-user-edit ml-2"></i></a></td>
+                            <td><a th:href="@{/deleteorder/{id}(id=${order.id})}" class="btn btn-primary"><i
+                                    class="fas fa-user-times ml-2"></i></a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- orders pagination -->
+                <div aria-label="Pagination" th:if="${orders.totalPages > 0}">
+                    <ul class="pagination justify-content-center font-weight-bold">
+                        <li class="page-item" th:classappend="${orders.number == 0} ? 'disabled'">
+                            <a class="page-link"
+                               th:href="@{/orders?page={id}(id=${orders.number < 2 ? 1 : orders.number-1}, size=${orders.size}) }"
+                               aria-label="Previous" title="Previous Page" data-toggle="tooltip">
+                                <span aria-hidden="false">prev</span>
+                            </a>
+                        </li>
+                        <li class="page-item" th:classappend="${i == orders.number } ? 'active'"
+                            th:each="i : ${#numbers.sequence( 1, orders.totalPages-1, 1)}">
+                            <a class="page-link" th:href="@{/orders?page={id}(id=${i}, size=${orders.size})}"
+                               th:text="${i}"
+                               th:title="${'Page '+ i}" data-toggle="tooltip"></a>
+                        </li>
+                        <li class="page-item" th:classappend="${orders.number + 1 == orders.totalPages} ? 'disabled'">
+                            <a class="page-link"
+                               th:href="@{/orders?page={id}(id=${orders.number + 1}, size=${orders.size})}"
+                               aria-label="Next" title="Next Page" data-toggle="tooltip">
+                                <span aria-hidden="false">next</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <p class="my-auto"><a href="/add-new-order" class="btn btn-primary"><i
+                        class="fas fa-user-plus ml-2"></i></a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<div class="row" th:fragment="user-row">
+    <div class="form-group col-md-6">
+        <label for="userName" class="col-form-label">Логин</label>
+        <input type="text" th:field="*{userName}" class="form-control" id="userName">
+        <span th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-6">
+        <label for="email" class="col-form-label">Email</label>
+        <input type="text" th:field="*{email}" class="form-control" id="email" placeholder="Email">
+        <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></span>
+    </div>
+
+    <div class="form-group col-md-6">
+        <label for="firstName" class="col-form-label">Имя</label>
+        <input type="text" th:field="*{firstName}" class="form-control" id="firstName">
+        <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="text-danger"></span>
+    </div>
+
+    <div class="form-group col-md-6">
+        <label for="lastName" class="col-form-label">Фамилия</label>
+        <input type="text" th:field="*{lastName}" class="form-control" id="lastName">
+        <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="text-danger"></span>
+    </div>
+
+
+    <div class="form-group col-md-6">
+        <label for="staff" class="col-form-label">Сотрудник</label>
+        <input type="checkbox" th:field="*{staff}" class="form-control" id="staff">
+        <span th:if="${#fields.hasErrors('staff')}" th:errors="*{staff}" class="text-danger"></span>
+    </div>
+
+    <div class="form-group col-md-6">
+        <label for="lastName" class="col-form-label">Активен</label>
+        <input type="checkbox" th:field="*{active}" class="form-control" id="active">
+        <span th:if="${#fields.hasErrors('active')}" th:errors="*{active}" class="text-danger"></span>
+    </div>
+
+    <div class="form-group col-md-6">
+        <label for="superUser" class="col-form-label">Супер пользователь</label>
+        <input type="checkbox" th:field="*{superUser}" class="form-control" id="superUser">
+        <span th:if="${#fields.hasErrors('superUser')}" th:errors="*{superUser}" class="text-danger"></span>
+    </div>
+
+    <div class="form-group col-md-6">
+        <label for="password" class="col-form-label">Пароль</label>
+        <input type="password" th:field="*{password}" class="form-control" id="password">
+        <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger"></span>
+    </div>
+
+</div>

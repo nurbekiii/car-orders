@@ -1,0 +1,37 @@
+<div class="row"  th:fragment="driver-row">
+    <div class="form-group col-md-6">
+        <label for="name" class="col-form-label">Имя</label>
+        <input type="text" th:field="*{name}" class="form-control" id="name">
+        <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-6">
+        <label for="surname" class="col-form-label">Фамилия</label>
+        <input type="text" th:field="*{surname}" class="form-control" id="surname">
+        <span th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}" class="text-danger"></span>
+    </div>
+
+    <div class="form-group col-md-6">
+        <label for="places" class="col-form-label">Кол-во мест</label>
+        <input type="text" th:field="*{places}" class="form-control" id="places">
+        <span th:if="${#fields.hasErrors('places')}" th:errors="*{places}" class="text-danger"></span>
+    </div>
+
+    <div class="form-group col-md-6">
+        <label for="phone" class="col-form-label">Телефон</label>
+        <input type="text" th:field="*{phone}" class="form-control" id="phone">
+        <span th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}" class="text-danger"></span>
+    </div>
+
+
+    <div class="form-group col-md-6">
+        <label for="status" class="col-form-label">Статус</label>
+        <input type="text" th:field="*{status}" class="form-control" id="status">
+        <span th:if="${#fields.hasErrors('status')}" th:errors="*{status}" class="text-danger"></span>
+    </div>
+
+    <div class="form-group col-md-6">
+        <label for="carId" class="col-form-label">Авто</label>
+        <input type="text" th:field="*{carId}" class="form-control" id="carId">
+        <span th:if="${#fields.hasErrors('carId')}" th:errors="*{carId}" class="text-danger"></span>
+    </div>
+</div>

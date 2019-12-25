@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{fragments/layout}">
+<head>
+    <title>Правка водителя</title>
+</head>
+<body>
+<div layout:fragment="content" th:remove="tag">
+    <div class="container my-5">
+        <h2 class="mb-5">Новый водитель</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <form action="#" th:action="@{/updatedriver/{id}(id=${driver.id})}" th:object="${driver}" method="post">
+                    <div class="row" th:include="driver-form :: driver-row"></div>
+                    <div class="row">
+                        <div class="col-md-6 mt-5">
+                            <input type="submit" class="btn btn-primary" value="Обновить">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
