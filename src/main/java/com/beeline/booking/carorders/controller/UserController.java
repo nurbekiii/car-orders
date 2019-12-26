@@ -2,10 +2,7 @@ package com.beeline.booking.carorders.controller;
 
 import com.beeline.booking.carorders.entity.Order;
 import com.beeline.booking.carorders.entity.User;
-import com.beeline.booking.carorders.pojo.ADUserResp;
-import com.beeline.booking.carorders.pojo.UserFilter;
-import com.beeline.booking.carorders.pojo.UserForm;
-import com.beeline.booking.carorders.pojo.UserReg;
+import com.beeline.booking.carorders.pojo.*;
 import com.beeline.booking.carorders.repo.DriverRepository;
 import com.beeline.booking.carorders.repo.OrderRepository;
 import com.beeline.booking.carorders.repo.UserRepository;
@@ -109,19 +106,21 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String loginUser(HttpServletRequest req, @Valid UserReg userReg, Model model, BindingResult result) {
+    public String loginUser(HttpServletRequest req, @Valid UserReg userReg, Model model, BindingResult result) throws Exception {
         Map<String, String> map = new HashMap<>();
 
         if (result.hasErrors()) {
-            map.put("error", result.toString());
-            model.addAttribute("param", map);
+            //map.put("error",);
+            Param param = new Param( result.toString());
+            model.addAttribute("param", param);
             return "login";
         }
 
         ADUserResp resp = adAuthorizer.authenticateInAD(userReg);
         if (resp == null) {
             map.put("error", "Invalid login or password");
-            model.addAttribute("param", map);
+            Param param = new Param("Invalid login or password");
+            model.addAttribute("param", param);
             return "login";
         }
 
@@ -148,8 +147,8 @@ public class UserController {
             return "redirect:/orders";
         }
 
-        map.put("error", "Invalid login or password");
-        model.addAttribute("param", map);
+        Param param = new Param("Invalid login or password");
+        model.addAttribute("param", param);
         return "login";
     }
 

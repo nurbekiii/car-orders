@@ -14,8 +14,10 @@
                     <a class="nav-item nav-link" th:href="@{/orders}">Заказы</a>
                     <a class="nav-item nav-link" th:href="@{/drivers}">Водители</a>
                     <a class="nav-item nav-link" th:href="@{/users}">Пользователи</a>
-                    <a class="nav-item nav-link" th:href="@{/logout}">Выход</a>
-                    <a class="nav-item nav-link" th:href="@{/login}">Вход</a>
+
+                    <a class="nav-item nav-link" th:if="${curUser != null}" th:href="@{/logout}">Выход</a>
+                    <a class="nav-item nav-link" th:if="${curUser == null}" th:href="@{/login}">Вход</a>
+
 
                     <a class="btn btn-success" th:text="${curUser}"></a>
                 </div>

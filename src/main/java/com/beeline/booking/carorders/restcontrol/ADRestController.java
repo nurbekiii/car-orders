@@ -62,6 +62,7 @@ public class ADRestController {
                 usr.setActive(true);
                 usr.setStaff(true);
                 usr.setSuperUser(false);
+                usr.setUserName(userReg.getUsername());
                 usr.setEmail(userReg.getUsername() + "@beeline.kg");
 
                 usr.setFirstName(resp.getFirstname());
