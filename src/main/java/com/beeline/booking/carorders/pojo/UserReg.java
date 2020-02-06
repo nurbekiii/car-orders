@@ -1,9 +1,6 @@
 package com.beeline.booking.carorders.pojo;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import java.io.Serializable;
 
@@ -17,7 +14,8 @@ public class UserReg implements Serializable {
     @JsonProperty(value = "password")
     private String password;
 
-    public UserReg() {}
+    public UserReg() {
+    }
 
     public UserReg(String username, String password) {
         this.username = username;

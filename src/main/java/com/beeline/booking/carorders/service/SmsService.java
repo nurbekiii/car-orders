@@ -1,5 +1,6 @@
 package com.beeline.booking.carorders.service;
 
+import com.beeline.booking.carorders.pojo.OrderRequest;
 import com.beeline.booking.carorders.pojo.SmsResp;
 import com.beeline.booking.carorders.pojo.SmsSendRequest;
 
@@ -7,5 +8,7 @@ import com.beeline.booking.carorders.pojo.SmsSendRequest;
  * @author NIsaev on 18.12.2019
  */
 public interface SmsService {
-  SmsResp sendSms(SmsSendRequest request);
+    SmsResp sendSms(SmsSendRequest request);
+
+    boolean informBySMS(OrderRequest request, int type, String userName);
 }

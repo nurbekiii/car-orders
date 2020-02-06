@@ -62,7 +62,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                .loginPage("/login")
+                .loginPage("/auth-login")
                 .permitAll().successHandler(authenticationSuccessHandler)
                 .defaultSuccessUrl("/orders")/////????????????
                 .and()
@@ -70,7 +70,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/login?logout")
+                .logoutSuccessUrl("/auth-login?logout")
                 .permitAll()
                 .and()
                 .exceptionHandling()

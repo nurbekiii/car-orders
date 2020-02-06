@@ -14,7 +14,7 @@ public class Period implements Serializable {
     @JsonProperty(value = "end_time", required = true)
     private Long endTime;
 
-    public Period(){
+    public Period() {
 
     }
 

@@ -18,7 +18,7 @@ public class OauthTokenResponse2 {
     private String id;
     private String jti;
 
-    public OauthTokenResponse2(){
+    public OauthTokenResponse2() {
 
     }
 

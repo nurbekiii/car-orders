@@ -18,8 +18,12 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     @Query("SELECT m FROM Order m WHERE m.startPoint LIKE %:filter% or m.endPoint LIKE %:filter% or m.comment LIKE %:filter% or m.userPhone LIKE %:filter%")
     List<Order> getAllByFilterText(@Param("filter") String filter);
 
-    @Query("SELECT m FROM Order m WHERE m.driverId=:driverId and m.startTime >= :startTime and m.endTime <= :endTime")
+    //@Query("SELECT m FROM Order m WHERE m.driverId=:driverId and ( (m.startTime >= :startTime and m.endTime <= :endTime) or (m.startTime between :startTime and :endTime) or (m.endTime between :startTime and :endTime))")
+    //List<Order> getAllByDriverTimePeriod(@Param("driverId") Integer driverId, @Param("startTime") Long startTime, @Param("endTime") Long endTime);
+
+    @Query("SELECT m FROM Order m WHERE m.driverId=:driverId and ( (m.startTime <= :startTime and m.endTime> :startTime) or (m.startTime < :endTime and m.endTime>= :endTime) )")
     List<Order> getAllByDriverTimePeriod(@Param("driverId") Integer driverId, @Param("startTime") Long startTime, @Param("endTime") Long endTime);
+
 
     List<Order> getAllByUserId(Integer userId);
 }

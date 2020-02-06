@@ -20,7 +20,7 @@ public class ADUserResp implements Serializable {
     @JsonProperty(value = "lastname")
     private String lastname;
 
-    public ADUserResp(){
+    public ADUserResp() {
 
     }
 

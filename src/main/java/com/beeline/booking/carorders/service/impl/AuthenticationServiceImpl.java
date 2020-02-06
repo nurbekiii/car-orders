@@ -3,7 +3,6 @@ package com.beeline.booking.carorders.service.impl;
 import com.beeline.booking.carorders.component.IAuthenticationFacade;
 import com.beeline.booking.carorders.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -37,7 +36,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public Authentication getAuthentication(){
+    public Authentication getAuthentication() {
         return authenticationFacade.getAuthentication();
     }
 }

@@ -1,10 +1,10 @@
 package com.beeline.booking.carorders.controller;
 
-import com.beeline.booking.carorders.entity.Order;
 import com.beeline.booking.carorders.entity.User;
-import com.beeline.booking.carorders.pojo.*;
-import com.beeline.booking.carorders.repo.DriverRepository;
-import com.beeline.booking.carorders.repo.OrderRepository;
+import com.beeline.booking.carorders.pojo.ADUserResp;
+import com.beeline.booking.carorders.pojo.Param;
+import com.beeline.booking.carorders.pojo.UserFilter;
+import com.beeline.booking.carorders.pojo.UserReg;
 import com.beeline.booking.carorders.repo.UserRepository;
 import com.beeline.booking.carorders.service.AuthenticationService;
 import com.beeline.booking.carorders.util.ADAuthorizer;
@@ -16,8 +16,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,7 +29,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author NIsaev on 06.12.2019
@@ -105,23 +106,22 @@ public class UserController {
         return "users-list";
     }
 
-    @PostMapping("/login")
+    @PostMapping("/auth-login")
     public String loginUser(HttpServletRequest req, @Valid UserReg userReg, Model model, BindingResult result) throws Exception {
         Map<String, String> map = new HashMap<>();
 
         if (result.hasErrors()) {
             //map.put("error",);
-            Param param = new Param( result.toString());
+            Param param = new Param(result.toString());
             model.addAttribute("param", param);
-            return "login";
+            return "auth-login";
         }
 
         ADUserResp resp = adAuthorizer.authenticateInAD(userReg);
         if (resp == null) {
-            map.put("error", "Invalid login or password");
             Param param = new Param("Invalid login or password");
             model.addAttribute("param", param);
-            return "login";
+            return "auth-login";
         }
 
         User usr = userRepository.getUserByUserName(userReg.getUsername());
@@ -149,14 +149,14 @@ public class UserController {
 
         Param param = new Param("Invalid login or password");
         model.addAttribute("param", param);
-        return "login";
+        return "auth-login";
     }
 
     @ModelAttribute
     public void addAttributes(Model model) {
         String user = "";
         Authentication authentication = authenticationService.getAuthentication();
-        if(authentication == null)
+        if (authentication == null)
             return;
 
         user = authenticationService.currentUserNameSimple();
@@ -181,8 +181,8 @@ public class UserController {
 
     @GetMapping("/users")
     public String getAllOrders(Model model, @RequestParam("page") Optional<Integer> page, @RequestParam("size") Optional<Integer> size) {
-        if(authenticationService.getAuthentication() == null)
-            return "redirect:/login";
+        if (authenticationService.getAuthentication() == null)
+            return "redirect:/auth-login";
 
         return fillUsers(model, page, size);
     }
@@ -190,7 +190,7 @@ public class UserController {
     private String fillUsers(Model model, Optional<Integer> page, Optional<Integer> size) {
         int currentPage = page.orElse(1);
         int pageSize = size.orElse(20);
-        Page<User> userPage = userRepository.findAll(PageRequest.of(currentPage, pageSize, Sort.by(Sort.Direction.DESC, "id")));
+        Page<User> userPage = userRepository.findAll(PageRequest.of(currentPage - 1, pageSize, Sort.by(Sort.Direction.DESC, "id")));
         model.addAttribute("users", userPage);
 
         return "users-list";

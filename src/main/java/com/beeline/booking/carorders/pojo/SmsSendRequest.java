@@ -12,7 +12,7 @@ public class SmsSendRequest implements Serializable {
     private String msisdn;
     private String text;
 
-    public SmsSendRequest(){
+    public SmsSendRequest() {
 
     }
 

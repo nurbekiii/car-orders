@@ -19,18 +19,27 @@ public class HomeController {
 
     @GetMapping("/")
     public String root() {
-        if(authenticationService.getAuthentication() == null)
-            return "redirect:/login";
+        if (authenticationService.getAuthentication() == null)
+            return "redirect:/auth-login";
 
         return "index";
     }
 
-    @GetMapping("/login")
+    @GetMapping("/auth-login")
     public String login() {
-        if(authenticationService.getAuthentication() != null)
+        if (authenticationService.getAuthentication() != null)
             return "redirect:/orders";
 
-        return "login";
+        return "auth-login";
+    }
+
+    @GetMapping("/login")
+    public String login2() {
+        return "redirect:/auth-login?logout";
+    }
+    @GetMapping("/logout")
+    public String logout() {
+        return "redirect:/auth-login?logout";
     }
 
     @GetMapping("/access-denied")
@@ -49,7 +58,7 @@ public class HomeController {
     public void addAttributes(Model model) {
         String user = "";
         Authentication authentication = authenticationService.getAuthentication();
-        if(authentication == null)
+        if (authentication == null)
             return;
 
         user = authenticationService.currentUserNameSimple();

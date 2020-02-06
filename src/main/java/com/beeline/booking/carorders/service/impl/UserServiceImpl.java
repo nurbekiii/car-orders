@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         List role = Arrays.asList(new SimpleGrantedAuthority(usr.getSuperUser() != null ? "ROLE_ADMIN" : "ROLE_USER"));
 
         if (usr != null && isActive && usr.getUserName().equals(userName)) {
-            return new org.springframework.security.core.userdetails.User(usr.getUserName(), usr.getPassword(),  role); //getAuthority()
+            return new org.springframework.security.core.userdetails.User(usr.getUserName(), usr.getPassword(), role); //getAuthority()
         }
         throw new UsernameNotFoundException("Invalid username or password.");
     }

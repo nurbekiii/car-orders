@@ -43,7 +43,7 @@ public class OrderResponse implements Serializable {
     @JsonProperty(value = "driver_id", required = true)
     private JsonNode driverId;
 
-    public OrderResponse(){
+    public OrderResponse() {
 
     }
 

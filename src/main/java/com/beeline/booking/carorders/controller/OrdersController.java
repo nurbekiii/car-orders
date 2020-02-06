@@ -1,11 +1,15 @@
 package com.beeline.booking.carorders.controller;
 
+import com.beeline.booking.carorders.entity.Driver;
 import com.beeline.booking.carorders.entity.Order;
+import com.beeline.booking.carorders.entity.User;
+import com.beeline.booking.carorders.pojo.OrderRequest;
 import com.beeline.booking.carorders.pojo.UserFilter;
 import com.beeline.booking.carorders.repo.DriverRepository;
 import com.beeline.booking.carorders.repo.OrderRepository;
 import com.beeline.booking.carorders.repo.UserRepository;
 import com.beeline.booking.carorders.service.AuthenticationService;
+import com.beeline.booking.carorders.service.SmsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -36,8 +40,8 @@ public class OrdersController {
     @Autowired
     private DriverRepository driverRepository;
 
-    //@Autowired
-    //private OrderService orderService;
+    @Autowired
+    private SmsService smsService;
 
     @Autowired
     private AuthenticationService authenticationService;
@@ -57,7 +61,12 @@ public class OrdersController {
         }
 
         orderRepository.save(order);
-
+        /////
+        User user = userRepository.getOne(order.getUserId());
+        Driver driver = driverRepository.getOne(order.getDriverId());
+        OrderRequest request = new OrderRequest(order.getId(), order.getDriverId(), order.getStartTime(), order.getEndTime(), order.getStartPoint(), order.getEndPoint(), order.getUserPhone(), order.getComment(), driver.getPhone());
+        smsService.informBySMS(request, 1, user.getFirstName()); //Add new order informing
+        //////
         return fillOrders(model, page, size);
     }
 
@@ -79,13 +88,29 @@ public class OrdersController {
 
         orderRepository.save(order);
 
+        ////
+        User user = userRepository.getOne(order.getUserId());
+        Driver driver = driverRepository.getOne(order.getDriverId());
+        OrderRequest request = new OrderRequest(order.getId(), order.getDriverId(), order.getStartTime(), order.getEndTime(), order.getStartPoint(), order.getEndPoint(), order.getUserPhone(), order.getComment(), driver.getPhone());
+        smsService.informBySMS(request, 3, user.getFirstName()); //update order informing
+        /////
+
+
         return fillOrders(model, page, size);
     }
 
     @GetMapping("/deleteorder/{id}")
     public String deleteUser(@PathVariable("id") int id, Model model, @RequestParam("page") Optional<Integer> page, @RequestParam("size") Optional<Integer> size) {
         Order order = orderRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid order Id:" + id));
-        orderRepository.delete(order);
+        //orderRepository.delete(order);
+
+        User user = userRepository.getOne(order.getUserId());
+        Driver driver = driverRepository.getOne(order.getDriverId());
+        OrderRequest request = new OrderRequest(order.getId(), order.getDriverId(), order.getStartTime(), order.getEndTime(), order.getStartPoint(), order.getEndPoint(), order.getUserPhone(), order.getComment(), driver.getPhone());
+        orderRepository.deleteById(id);
+
+        smsService.informBySMS(request, 2, user.getFirstName());
+
 
         return fillOrders(model, page, size);
     }
@@ -98,7 +123,7 @@ public class OrdersController {
         String txtFilter = filter.getTextvalue();
         List<Order> orders = orderRepository.getAllByFilterText(txtFilter);
 
-        Page<Order> orderPage = new  PageImpl<>(orders, PageRequest.of(currentPage, pageSize, Sort.by(Sort.Direction.DESC, "id")), orders.size());
+        Page<Order> orderPage = new PageImpl<>(orders, PageRequest.of(currentPage, pageSize, Sort.by(Sort.Direction.DESC, "id")), orders.size());
 
         model.addAttribute("users", userRepository.findAll());
         model.addAttribute("drivers", driverRepository.findAll());
@@ -109,8 +134,8 @@ public class OrdersController {
 
     @GetMapping("/orders")
     public String getAllOrders(Model model, @RequestParam("page") Optional<Integer> page, @RequestParam("size") Optional<Integer> size) {
-        if(authenticationService.getAuthentication() == null)
-            return "redirect:/login";
+        if (authenticationService.getAuthentication() == null)
+            return "redirect:/auth-login";
 
         return fillOrders(model, page, size);
     }
@@ -119,7 +144,7 @@ public class OrdersController {
         int currentPage = page.orElse(1);
         int pageSize = size.orElse(20);
 
-        Page<Order> orderPage = orderRepository.findAll(PageRequest.of(currentPage, pageSize, Sort.by(Sort.Direction.DESC, "id")));
+        Page<Order> orderPage = orderRepository.findAll(PageRequest.of(currentPage - 1, pageSize, Sort.by(Sort.Direction.DESC, "id")));
         model.addAttribute("orders", orderPage);
 
         model.addAttribute("users", userRepository.findAll());
@@ -132,7 +157,7 @@ public class OrdersController {
     public void addAttributes(Model model) {
         String user = "";
         Authentication authentication = authenticationService.getAuthentication();
-        if(authentication == null)
+        if (authentication == null)
             return;
 
         user = authenticationService.currentUserNameSimple();

@@ -2,12 +2,11 @@ package com.beeline.booking.carorders.restcontrol;
 
 import com.beeline.booking.carorders.entity.Driver;
 import com.beeline.booking.carorders.entity.Order;
+import com.beeline.booking.carorders.entity.User;
 import com.beeline.booking.carorders.exceptions.OrderException;
 import com.beeline.booking.carorders.exceptions.UserNotFoundException;
 import com.beeline.booking.carorders.pojo.OrderRequest;
 import com.beeline.booking.carorders.pojo.OrderResponse;
-import com.beeline.booking.carorders.pojo.SmsResp;
-import com.beeline.booking.carorders.pojo.SmsSendRequest;
 import com.beeline.booking.carorders.repo.DriverRepository;
 import com.beeline.booking.carorders.repo.OrderRepository;
 import com.beeline.booking.carorders.repo.UserRepository;
@@ -21,9 +20,7 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -77,7 +74,7 @@ public class OrderRestController {
 
 
     @PostMapping("/create")
-    public Order createOrder(@Valid @RequestBody OrderRequest request, OAuth2Authentication authentication) throws UserNotFoundException, OrderException {
+    public synchronized Order createOrder(@Valid @RequestBody OrderRequest request, OAuth2Authentication authentication) throws UserNotFoundException, OrderException {
         int userId = getOauthUserId(authentication);
         if (userId <= 0) {
             throw new UserNotFoundException("User is not found by the access token");
@@ -88,6 +85,8 @@ public class OrderRestController {
             //driver is busy at this time
             throw new OrderException("Order for this time period exists for this driver");
         }
+
+        User user = userRepository.getOne(userId);
 
         Order order = new Order();
         order.setDriverId(request.getDriverId());
@@ -101,7 +100,7 @@ public class OrderRestController {
 
         Order res = orderRepository.save(order);
         if (res != null) {
-            boolean resInform = informBySMS(request);
+            boolean resInform = smsService.informBySMS(request, 1, user.getFirstName());
         }
 
         return res;
@@ -110,11 +109,19 @@ public class OrderRestController {
     @DeleteMapping("/orders/{id}")
     public String delete(@PathVariable Integer id) {
         try {
-            orderRepository.deleteById(id);
-            return "OK";
+            Order order = orderRepository.getOne(id);
+            if (order != null) {
+                User user = userRepository.getOne(order.getUserId());
+                Driver driver = driverRepository.getOne(order.getDriverId());
+                OrderRequest request = new OrderRequest(order.getId(), order.getDriverId(), order.getStartTime(), order.getEndTime(), order.getStartPoint(), order.getEndPoint(), order.getUserPhone(), order.getComment(), driver.getPhone());
+                orderRepository.deleteById(id);
+
+                smsService.informBySMS(request, 2, user.getFirstName());
+                return "OK";
+            }
         } catch (EmptyResultDataAccessException t) {
-            return "FAIL";
         }
+        return "FAIL";
     }
 
     private Integer getOauthUserId(OAuth2Authentication authentication) {
@@ -125,37 +132,5 @@ public class OrderRestController {
             return usr.getId();
 
         return -1;
-    }
-
-    private boolean informBySMS(OrderRequest request) {
-        String userPhone = request.getUserPhone();
-        String driverMsisdn = driverRepository.getOne(request.getDriverId()).getPhone();
-
-        Date date1 = new Date(request.getStartTime());
-        Date date2 = new Date(request.getEndTime());
-        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-
-        String dt1 = sdf.format(date1);
-        String dt2 = sdf.format(date2);
-
-
-        String smsToDriver = String.format("Поезка в %s-%s, %s-%s, заказчик %s", dt1, dt2, request.getStartPoint(), request.getEndPoint(), userPhone);
-        String smsToUser = String.format("Поезка в %s-%s, %s-%s, водитель %s", dt1, dt2, request.getStartPoint(), request.getEndPoint(), driverMsisdn);
-        //to driver
-        SmsResp resp1 = sendSMS("996773905665"/*driverMsisdn*/, smsToDriver);
-        //to user
-        SmsResp resp2 = sendSMS("996773905665"/*userPhone*/, smsToUser);
-        if (resp1 == null || resp2 == null)
-            return false;
-
-        if (resp1.getStatus().equalsIgnoreCase("success") || resp2.getStatus().equalsIgnoreCase("success"))
-            return true;
-
-        return false;
-    }
-
-    private SmsResp sendSMS(String msisdn, String smsText) {
-        SmsSendRequest req1 = new SmsSendRequest(smsSendLogin, smsSendPsw, msisdn, smsText);
-        return smsService.sendSms(req1);
     }
 }

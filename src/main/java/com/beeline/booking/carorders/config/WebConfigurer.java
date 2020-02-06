@@ -1,14 +1,16 @@
 package com.beeline.booking.carorders.config;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.LocaleResolver;
-import org.springframework.web.servlet.config.annotation.*;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
@@ -33,6 +35,7 @@ public class WebConfigurer extends WebMvcConfigurerAdapter {
                 "/resources/**", "/webjars/**", "/static/**", "/i18n/**", "/js/**", "/css/**", "/img/**").
                 addResourceLocations("/resources/**", "/webjars/", "/static/", "/i18n/", "/js/", "/css/", "/img/");
     }
+
     @Bean
     ReloadableResourceBundleMessageSource messageSource() {
         ReloadableResourceBundleMessageSource bundleMessageSource = new ReloadableResourceBundleMessageSource();

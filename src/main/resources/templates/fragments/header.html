@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"     >
+>
 <body>
 <th:block th:fragment="header">
     <div class="container">
@@ -16,7 +16,7 @@
                     <a class="nav-item nav-link" th:href="@{/users}">Пользователи</a>
 
                     <a class="nav-item nav-link" th:if="${curUser != null}" th:href="@{/logout}">Выход</a>
-                    <a class="nav-item nav-link" th:if="${curUser == null}" th:href="@{/login}">Вход</a>
+                    <a class="nav-item nav-link" th:if="${curUser == null}" th:href="@{/auth-login}">Вход</a>
 
 
                     <a class="btn btn-success" th:text="${curUser}"></a>

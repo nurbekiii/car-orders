@@ -72,8 +72,8 @@ public class DriverController {
 
     @GetMapping("/drivers")
     public String getAllUsers(Model model) {
-        if(authenticationService.getAuthentication() == null)
-            return "redirect:/login";
+        if (authenticationService.getAuthentication() == null)
+            return "redirect:/auth-login";
 
         model.addAttribute("drivers", driverRepository.findAll());
         return "drivers-list";
@@ -83,7 +83,7 @@ public class DriverController {
     public void addAttributes(Model model) {
         String user = "";
         Authentication authentication = authenticationService.getAuthentication();
-        if(authentication == null)
+        if (authentication == null)
             return;
 
         user = authenticationService.currentUserNameSimple();

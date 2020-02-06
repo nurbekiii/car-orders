@@ -14,8 +14,8 @@ import java.io.Serializable;
 public class Driver implements Serializable {
 
     @Id
-    @SequenceGenerator(name="driver_gen", sequenceName="drivers_driver_id_seq", allocationSize = 1)
-    @GeneratedValue(generator="driver_gen")
+    @SequenceGenerator(name = "driver_gen", sequenceName = "drivers_driver_id_seq", allocationSize = 1)
+    @GeneratedValue(generator = "driver_gen")
     private Integer id;
 
     @Column(name = "name", nullable = false)
@@ -37,7 +37,7 @@ public class Driver implements Serializable {
     @JsonProperty(value = "car", required = true)
     private Integer carId;
 
-    public Driver(){
+    public Driver() {
 
     }
 

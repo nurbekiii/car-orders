@@ -26,19 +26,19 @@ import java.util.Arrays;
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
     @Value("${auth.token.client.id}")
-    private  String CLIENT_ID;
+    private String CLIENT_ID;
 
     @Value("${auth.token.client.secret}")
-    private  String CLIENT_SECRET;
+    private String CLIENT_SECRET;
 
     @Value("${auth.token.grant.type}")
-    private  String GRANT_TYPE;
+    private String GRANT_TYPE;
 
     @Value("${auth.token.validity.seconds}")
-    private  int ACCESS_TOKEN_VALIDITY_SECONDS;//1 hour
+    private int ACCESS_TOKEN_VALIDITY_SECONDS;//1 hour
 
     @Value("${auth.token.refesh.token.validity.seconds}")
-    private  int FREFRESH_TOKEN_VALIDITY_SECONDS;//1 day
+    private int FREFRESH_TOKEN_VALIDITY_SECONDS;//1 day
 
     static final String AUTHORIZATION_CODE = "authorization_code";
     static final String REFRESH_TOKEN = "refresh_token";

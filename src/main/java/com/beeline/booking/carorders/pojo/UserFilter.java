@@ -6,7 +6,8 @@ package com.beeline.booking.carorders.pojo;
 public class UserFilter {
     private String textvalue;
 
-    public UserFilter() {}
+    public UserFilter() {
+    }
 
     public UserFilter(String textvalue) {
         this.textvalue = textvalue;

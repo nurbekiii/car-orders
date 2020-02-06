@@ -5,11 +5,11 @@ import java.io.Serializable;
 /**
  * @author NIsaev on 18.12.2019
  */
-public class SmsResp  implements Serializable {
+public class SmsResp implements Serializable {
     private String status;
     private String message;
 
-    public SmsResp(){
+    public SmsResp() {
 
     }
 

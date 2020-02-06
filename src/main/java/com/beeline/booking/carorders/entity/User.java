@@ -148,7 +148,7 @@ public class User implements Serializable {
         isActive = active;
     }
 
-    @DateTimeFormat(pattern="dd.MM.yyyy HH:mm")
+    @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm")
     public LocalDateTime getDateJoined() {
         return dateJoined;
     }

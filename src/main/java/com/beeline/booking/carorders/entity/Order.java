@@ -21,12 +21,12 @@ public class Order implements Serializable {
 
     @Column(name = "start_time", nullable = false)
     @JsonProperty(value = "start_time")
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'hh:mm")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private Long startTime;
 
     @Column(name = "end_time", nullable = false)
     @JsonProperty(value = "end_time")
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'hh:mm")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private Long endTime;
 
     @Column(name = "start_point", nullable = false)

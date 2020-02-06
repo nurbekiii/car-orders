@@ -42,7 +42,7 @@ public class OrderRequest implements Serializable {
     @JsonProperty(value = "driver_phone", required = true)
     private String driverPhone;
 
-    public OrderRequest(){
+    public OrderRequest() {
 
     }
 

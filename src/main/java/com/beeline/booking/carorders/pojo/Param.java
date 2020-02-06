@@ -4,11 +4,12 @@ package com.beeline.booking.carorders.pojo;
  * @author NIsaev on 26.12.2019
  */
 public class Param {
-    private  String error;
+    private String error;
 
     public Param() {
 
     }
+
     public Param(String error) {
         this.error = error;
     }
